@@ -316,23 +316,6 @@ speed-unit='kph'
 temperature-unit='centigrade'
 FOE
 
-# Rebuild schema cache with any overrides we installed
-glib-compile-schemas /usr/share/glib-2.0/schemas
-
-# Make the installer show up
-if [ -f /usr/share/applications/liveinst.desktop ]; then
-  # Show harddisk install in shell dash
-  sed -i -e 's/NoDisplay=true/NoDisplay=false/' /usr/share/applications/liveinst.desktop ""
-  # need to move it to anaconda.desktop to make shell happy
-  mv /usr/share/applications/liveinst.desktop /usr/share/applications/anaconda.desktop
-
-# Set up auto-login
-cat > /etc/gdm/custom.conf << FOE
-[daemon]
-AutomaticLoginEnable=True
-AutomaticLogin=liveuser
-FOE
-
 # Improve font rendering (Amit Caleechurn)
 cat <<FOE | tee /etc/fonts/local.conf > /dev/null 2>&1
 <?xml version="1.0"?>
@@ -352,8 +335,29 @@ cat <<FOE | tee /etc/fonts/local.conf > /dev/null 2>&1
 </fontconfig>
 FOE
 
-gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing rgba
-gsettings set org.gnome.settings-daemon.plugins.xsettings hinting slight
+# Improve font rendering (Amit Caleechurn)
+cat >> /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.override << FOE
+[org.gnome.settings-daemon.plugins.xsettings]
+antialiasing='rgba'
+hinting='medium'
+FOE
+
+# Rebuild schema cache with any overrides we installed
+glib-compile-schemas /usr/share/glib-2.0/schemas
+
+# Make the installer show up
+if [ -f /usr/share/applications/liveinst.desktop ]; then
+  # Show harddisk install in shell dash
+  sed -i -e 's/NoDisplay=true/NoDisplay=false/' /usr/share/applications/liveinst.desktop ""
+  # need to move it to anaconda.desktop to make shell happy
+  mv /usr/share/applications/liveinst.desktop /usr/share/applications/anaconda.desktop
+
+# Set up auto-login
+cat > /etc/gdm/custom.conf << FOE
+[daemon]
+AutomaticLoginEnable=True
+AutomaticLogin=liveuser
+FOE
 
 # Turn off PackageKit-command-not-found while uninstalled
 if [ -f /etc/PackageKit/CommandNotFound.conf ]; then

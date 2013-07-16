@@ -33,9 +33,11 @@ SB19 is based on Gnome3 so most %post options are related to the configuration o
 
 3) Anaconda (live install) displays the version number twice "SnowBird Linux 19 (New Dawn) 19. Investigation required. No side effects, just annoying.
 
-4) While booting the live image lsb fails as it tries to enable the swap partition from the existing installation which is busy. No side effects, just a red warning.
+4) Anaconda (live install) prompts for the installation of fonts required for other languages. Pressing cancel is required. Annoying.
 
-5) Once installed, a script is run manually to reproduce the steps from livesys, so this must be automated at a point :)
+5) While booting the live image lsb fails as it tries to enable the swap partition from the existing installation which is busy. No side effects, just a red warning.
+
+6) Once installed, a script is run manually to reproduce the steps from livesys, so this must be automated at a point :)
 
 ## Build Instructions ##
 

@@ -1,13 +1,10 @@
-# fedora-repo.ks
-#
-# Customized by Amit Caleechurn
-# http://linuxmauritius.wordpress.com
-# mailto:acaleechurn@fedoraproject.org
-#
 # Include the appropriate repo definitions
+
 # Exactly one of the following should be uncommented
+
 # For the master branch the following should be uncommented
 # %include fedora-repo-rawhide.ks
+
 # For non-master branches the following should be uncommented
 # %include fedora-repo-non-rawhide.ks
 
@@ -17,7 +14,7 @@ repo --name=fedora --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=
 repo --name=updates --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
 #repo --name=updates-testing --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f$releasever&arch=$basearch
 
-# Additional Repositories (Amit Caleechurn)
+# Additional repos (Amit Caleechurn)
 repo --name="RPMFusion Free" --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-19&arch=x86_64
 repo --name="RPMFusion Free - Updates" --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-19&arch=x86_64
 repo --name="RPMFusion Non-Free" --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-19&arch=x86_64

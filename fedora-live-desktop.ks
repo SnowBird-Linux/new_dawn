@@ -1,7 +1,7 @@
 # Maintained by the Fedora Desktop SIG:
 # http://fedoraproject.org/wiki/SIGs/Desktop
 # mailto:desktop@lists.fedoraproject.org
-#
+
 # Customized by Amit Caleechurn
 # http://linuxmauritius.wordpress.com
 # mailto:acaleechurn@fedoraproject.org
@@ -56,6 +56,7 @@ overpass-fonts
 mozilla-adblockplus
 gftp
 gwibber
+ekiga
 
 # Splash theme (Amit Caleechurn)
 plymouth-theme-solar
@@ -97,6 +98,7 @@ gimp-help-browser
 bluefish
 rapidsvn
 git
+giggle
 meld
 font-manager
 geany
@@ -159,10 +161,18 @@ hamster-time-tracker
 -fedora-logos
 -fedora-release
 -fedora-release-notes
+-plymouth-theme-charge
 generic-release
 generic-logos
 generic-release-notes
 fedora-remix-logos
+
+%end
+
+%post --nochroot
+
+mkdir $INSTALL_ROOT/opt/patch
+cp -r /build/patch/* $INSTALL_ROOT/opt/patch
 
 %end
 
@@ -171,7 +181,7 @@ fedora-remix-logos
 # Set release name to SnowBird Linux (Amit Caleechurn)
 sed -i -e 's/Generic release/SnowBird Linux/g' /etc/fedora-release /etc/issue /etc/issue.net
 sed -i -e 's/Generic/New Dawn/g' /etc/fedora-release /etc/issue /etc/issue.net
-sed -i -e 's/generic/snowbird/g' /etc/system-release-cpe
+sed -i 's/generic/snowbird/g' /etc/system-release-cpe
 
 cat > /etc/os-release << FOE
 NAME="SnowBird Linux"
@@ -190,7 +200,10 @@ cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/fedora-logo-small.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/poweredby.png
 
-# Add link to the Inkscape Course (Amit Caleechurn)
+# Make libreoffice pretty with faenza icons (Amit Caleechurn)
+cp  /opt/patch/images_crystal.zip /usr/lib64/libreoffice/share/config/images_tango.zip
+
+# Add link to the Inkscape course (Amit Caleechurn)
 cat >> /usr/share/applications/inkscape-course.desktop << FOE
 [Desktop Entry]
 Name=Introduction To Inkscape
@@ -252,7 +265,7 @@ tap-to-click=true
 natural-scroll=true
 FOE
 
-# Set Window theme (Amit Caleechurn)
+# Set window theme (Amit Caleechurn)
 cat >> /usr/share/glib-2.0/schemas/org.gnome.desktop.wm.preferences.gschema.override << FOE
 [org.gnome.desktop.wm.preferences]
 theme='Greybird'
@@ -291,17 +304,7 @@ cat >> /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.window-list.gschem
 grouping-mode=always
 FOE
 
-# Weather extension (Amit Caleechurn)
-cat >> /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.weather.gschema.override << FOE
-[org.gnome.shell.extensions.weather]
-city='1377436>Port Louis, Port Louis (MU)'
-position-in-panel='right'
-pressure-unit='hPa'
-unit='celsius'
-wind-speed-unit='kph'
-FOE
-
-# Configure Weather (Amit Caleechurn)
+# Configure weather (Amit Caleechurn)
 cat >> /usr/share/glib-2.0/schemas/org.gnome.Weather.Application.gschema.override << FOE
 [org.gnome.Weather.Application]
 locations=[<(uint32 1, <('Port Louis', 'FIMP', true, @m(dd) (-0.35662893800641049, 1.0064732078011609), @m(dd) (-0.35189230640271557, 1.0035449292887497))>)>]
@@ -316,7 +319,17 @@ speed-unit='kph'
 temperature-unit='centigrade'
 FOE
 
-# Improve font rendering (Amit Caleechurn)
+# Weather extension (Amit Caleechurn)
+cat >> /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.weather.gschema.override << FOE
+[org.gnome.shell.extensions.weather]
+city='1377436>Port Louis, Port Louis (MU)'
+position-in-panel='right'
+pressure-unit='hPa'
+unit='celsius'
+wind-speed-unit='kph'
+FOE
+
+# Font config (Amit Caleechurn)
 cat <<FOE | tee /etc/fonts/local.conf > /dev/null 2>&1
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
@@ -365,5 +378,35 @@ if [ -f /etc/PackageKit/CommandNotFound.conf ]; then
 fi
 
 EOF
+
+cat > /etc/rc.d/init.d/patchsb << EOF
+#!/bin/bash
+#
+# Patch SB: Applies all the fixes present on the live environment
+#
+# chkconfig: 345 99 02
+# description: SnowBird Linux Patch
+
+# Firstrun check
+if [ -d /home/liveuser ]; then
+    exit 0
+fi
+
+if [ -e "$HOME/.config/sbl-firstrun" ]; then
+    chkconfig patchsb off
+    exit 0
+fi
+
+# Apply the patch
+if [ ! -f "$HOME/.config/sbl-firstrun" ]; then
+    touch $HOME/.config/sbl-firstrun
+    sh /opt/patch/patchsb19.sh
+fi
+
+EOF
+
+chmod 755 /etc/rc.d/init.d/patchsb
+/sbin/restorecon /etc/rc.d/init.d/patchsb
+/sbin/chkconfig --add patchsb
 
 %end

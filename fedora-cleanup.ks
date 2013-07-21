@@ -1,5 +1,4 @@
 # fedora-cleanup.ks
-#
 # Customized by Amit Caleechurn
 # http://linuxmauritius.wordpress.com
 # mailto:acaleechurn@fedoraproject.org
@@ -68,5 +67,8 @@ nss-mdns
 # We use gnome-control-center's printer and input sources panels instead
 -system-config-printer
 -im-chooser
+
+#Driver for QPDL/SPL2 printers-Samsung and several Xerox printers (Amit Caleechurn)
+#splix
 
 %end

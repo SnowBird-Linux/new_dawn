@@ -6,11 +6,6 @@
 #
 # Does includes "default" language configuration (kickstarts including
 # this template can override these settings)
-#
-# Customized by Amit Caleechurn
-# http://linuxmauritius.wordpress.com
-# mailto:acaleechurn@fedoraproject.org
-
 
 # Customization start >> #
 

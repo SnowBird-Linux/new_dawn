@@ -5,18 +5,21 @@ new_dawn
 
 SB19 consists of 4 files as set below:
 
-fedora-live-base.ks
-fedora-live-desktop.ks
-fedora-repo.ks
-fedora-cleanup.ks
+1) fedora-live-base.ks
 
-fedora-live-base.ks is used to set the base of the distribution and modify the live image at boot time. Minimal edits are required in the file.
+2) fedora-live-desktop.ks
 
-fedora-live-desktop.ks contains the major tweaks for producing the remix. Most of the customizations are specified in the file.
+3) fedora-repo.ks
 
-fedora-repo.ks is used to specify the repositories to be used while producing the media. All repositories should be included in the file.
+4) fedora-cleanup.ks
 
-fedora-cleanup.ks is used to clean-up/exclude unwanted packages from the build. Specify all packages to be removed in the file.
+-> fedora-live-base.ks is used to set the base of the distribution and modify the live image at boot time. Minimal edits are required in the file.
+
+-> fedora-live-desktop.ks contains the major tweaks for producing the remix. Most of the customizations are specified in the file.
+
+-> fedora-repo.ks is used to specify the repositories to be used while producing the media. All repositories should be included in the file.
+
+-> fedora-cleanup.ks is used to clean-up/exclude unwanted packages from the build. Specify all packages to be removed in the file.
 
 
 ## Build Instructions ##

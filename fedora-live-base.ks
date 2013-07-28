@@ -7,7 +7,7 @@
 # Does includes "default" language configuration (kickstarts including
 # this template can override these settings)
 
-# Customization start >> #
+# Customization start (Amit Caleechurn) >> #
 
 lang en_US.UTF-8
 keyboard us
@@ -16,9 +16,9 @@ authconfig --enableshadow --passalgo=sha512
 firewall --enabled --service=ssh,mdns,ipp-client,samba-client
 selinux --enforcing
 xconfig --startxonboot
-services --enabled=NetworkManager,sshd --disabled=iscsi,iscsid,isdn,netfs,network,nfs,nfslock,pcscd,rpcbind,rpcgssd,rpcidmapd,rpcsvcgssd,sendmail,rngd,avahi-daemon,bluetooth,abrtd,abrt-ccpp,abrt-oops,abrt-vmcore,abrt-uefioops,abrt-xorg,capi,iked
+services --enabled=NetworkManager,sshd,restorecond  --disabled=iscsi,iscsiuio,iscsid,isdn,netfs,network,nfs,nfslock,pcscd,rpcbind,rpcgssd,rpcidmapd,rpcsvcgssd,sendmail,sm-client,rngd,avahi-daemon,bluetooth,abrtd,abrt-ccpp,abrt-oops,abrt-vmcore,abrt-uefioops,abrt-xorg,capi,iked,iprdump,iprinit,iprupdate,multipathd,libvirtd
 
-# Excluded when debugging (abrtd,abrt-ccpp,abrt-oops,abrt-vmcore,abrt-uefioops,abrt-xorg,capi)
+# Excluded when debugging (abrtd,abrt-ccpp,abrt-oops,abrt-vmcore,abrt-uefioops,abrt-xorg)
 
 %include fedora-repo.ks
 
@@ -35,6 +35,10 @@ services --enabled=NetworkManager,sshd --disabled=iscsi,iscsid,isdn,netfs,networ
 # <notting> walters: because otherwise dependency loops cause yum issues.
 kernel
 
+# FIXME; apparently the glibc maintainers dislike this, but it got put into the
+# desktop image at some point.  We won't touch this one for now. (Moved into base by Amit Caleechurn)
+nss-mdns
+
 # This was added a while ago, I think it falls into the category of
 # "Diagnosis/recovery tool useful from a Live OS image".  Leaving this untouched
 # for now.
@@ -50,6 +54,10 @@ qemu-guest-agent
 %end
 
 %post
+
+#Set the plymouth theme (Experimental - Amit Caleechurn)
+sed -i s/^Theme=.*/Theme=solar/ /etc/plymouth/plymouthd.conf
+
 # FIXME: it'd be better to get this installed from a package
 cat > /etc/rc.d/init.d/livesys << EOF
 #!/bin/bash
@@ -171,8 +179,8 @@ if [ -n "\$configdone" ]; then
   exit 0
 fi
 
-# add fedora user with no passwd
-action "Adding live user" useradd \$USERADDARGS -c "Live System User" liveuser
+# add a SnowBird user with no passwd (Amit Caleechurn)
+action "Adding live user" useradd \$USERADDARGS -c "SnowBird R&D" liveuser
 passwd -d liveuser > /dev/null
 usermod -aG wheel liveuser > /dev/null
 
@@ -181,7 +189,7 @@ mkdir -p /home/liveuser/.config
 cat >> /home/liveuser/.config/gnome-initial-setup-done << FOE
 yes
 FOE
-
+# Change the permissions and context to ensure that the user user can login (Amit Caleechurn)
 /bin/chown -R liveuser:liveuser /home/liveuser/.config
 /sbin/restorecon -R /home/liveuser/.config
 
@@ -307,14 +315,27 @@ rm -f /core*
 %post --nochroot
 cp $INSTALL_ROOT/usr/share/doc/*-release-*/GPL $LIVE_ROOT/GPL
 
+# add a README (Amit Caleechurn)
+cat > $LIVE_ROOT/README.txt << EOF
+SnowBird Linux is brought to you by Amit Caleechurn (acaleechurn@fedoraproject.org).
+
+This is a Live DVD, simply reboot your computer to run from this DVD.
+
+To install SnowBird Linux, simply run the installer on the desktop or in the left menu (under GNOME 3).
+
+SnowBird Linux has been developed (remixed) for SnowBird R&D a subsidiary of SnowBird Corporation.
+
+More info about SnowBird Linux can be found @ http://linuxmauritius.wordpress.com/snowbird-linux/
+
+Enjoy!
+
+Note: SnowBird Linux is not provided or supported by the Fedora Project. Official, unmodified Fedora software is available through the Fedora Project website (http://fedoraproject.org). 
+EOF
+
 # only works on x86, x86_64
 if [ "$(uname -i)" = "i386" -o "$(uname -i)" = "x86_64" ]; then
   if [ ! -d $LIVE_ROOT/LiveOS ]; then mkdir -p $LIVE_ROOT/LiveOS ; fi
   cp /usr/bin/livecd-iso-to-disk $LIVE_ROOT/LiveOS
 fi
-
-# Make sure that liveuser has the correct permissions and contexts (Amit Caleechurn)
-/bin/chown -R liveuser:liveuser /home/liveuser/
-/sbin/restorecon -R /home/liveuser/
 
 %end

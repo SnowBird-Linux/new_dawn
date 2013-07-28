@@ -5,6 +5,11 @@
 
 %packages
 
+# Rebranding to SnowBird Linux (Amit Caleechurn)
+-fedora-logos
+-fedora-release
+-fedora-release-notes
+
 # Remove default unwanted hardware firmware and support we don't want (Amit Caleechurn)
 -foomatic*
 -ghostscript*
@@ -56,10 +61,6 @@
 -totem-mozplugin
 -totem-nautilus
 -gnome-mplayer
-
-# FIXME; apparently the glibc maintainers dislike this, but it got put into the
-# desktop image at some point.  We won't touch this one for now.
-nss-mdns
 
 # This one needs to be kicked out of @standard
 -smartmontools

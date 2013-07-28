@@ -15,17 +15,11 @@ part / --size 6990 --fstype=ext4
 
 # Desktop
 @gnome-desktop
-@multimedia
 gnome-shell-extension-places-menu
 gnome-shell-extension-weather
 gnome-shell-extension-window-list
 gnome-shell-extension-alternate-tab
 gnome-shell-extension-drive-menu
-faenza-icon-theme
-greybird-gtk2-theme
-greybird-gtk3-theme
-greybird-metacity-theme
-gnome-system-log
 gnome-tweak-tool
 
 # Office
@@ -37,6 +31,8 @@ vym
 cherrytree
 
 # Implicitly include the fonts we want (Amit Caleechurn)
+@fonts
+# The fonts group is included as a dirty fix for Anaconda
 liberation-mono-fonts
 liberation-sans-fonts
 liberation-serif-fonts
@@ -58,8 +54,12 @@ gftp
 gwibber
 ekiga
 
-# Splash theme (Amit Caleechurn)
+# Themes and icons (Amit Caleechurn)
 plymouth-theme-solar
+faenza-icon-theme
+greybird-gtk2-theme
+greybird-gtk3-theme
+greybird-metacity-theme
 
 # Virtualization (Amit Caleechurn)
 #VirtualBox
@@ -89,6 +89,7 @@ remmina-plugins-rdp
 dconf-editor
 systemd-ui
 freeipa-client
+gnome-system-log
 
 # Development (Amit Caleechurn)
 gimp 
@@ -102,6 +103,7 @@ giggle
 meld
 font-manager
 geany
+gobby
 
 # Graphics (Amit Caleechurn)
 scribus
@@ -112,6 +114,7 @@ dia
 dia-gnomeDIAicons
 
 # Audio & Video (Amit Caleechurn)
+@multimedia
 banshee
 
 ### Non Free (Amit Caleechurn)###
@@ -158,10 +161,6 @@ HandBrake-gui
 hamster-time-tracker
 
 # Rebranding to SnowBird Linux (Amit Caleechurn)
--fedora-logos
--fedora-release
--fedora-release-notes
--plymouth-theme-charge
 generic-release
 generic-logos
 generic-release-notes
@@ -199,6 +198,15 @@ cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/fedora-logo.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/fedora-logo-small.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/poweredby.png
+
+# Rebuild initrd for the boot screen (Doesn't seem to work on boot)
+KERNEL_VERSION=$(rpm -q kernel --qf '%{version}-%{release}.%{arch}\n')
+/usr/sbin/plymouth-set-default-theme solar --rebuild-initrd
+/sbin/dracut -f /boot/initramfs-$KERNEL_VERSION.img $KERNEL_VERSION
+#cat >> /etc/default/grub << FOE
+#GRUB_GFXMODE="1024x768"
+#FOE
+#/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Make libreoffice pretty with faenza icons (Amit Caleechurn)
 cp  /opt/patch/images_crystal.zip /usr/lib64/libreoffice/share/config/images_tango.zip

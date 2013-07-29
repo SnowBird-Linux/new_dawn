@@ -104,6 +104,7 @@ meld
 font-manager
 geany
 gobby
+gedit-plugins
 
 # Graphics (Amit Caleechurn)
 scribus
@@ -121,17 +122,20 @@ banshee
 
 # Audio & Video
 flash-plugin
-gstreamer-ffmpeg
+gstreamer*-plugins-bad
+gstreamer*-plugins-bad-*free
+gstreamer*-plugins-bad-freeworld
+gstreamer-plugins-bad-free-extras
+gstreamer*-plugins-good
+gstreamer*-plugins-ugly
 gstreamer-plugins-entrans
 gstreamer-plugins-espeak
 gstreamer-plugins-fc
 gstreamer-plugins-good
 gstreamer-plugins-good-extras
 gstreamer-plugins-ugly
-gstreamer-plugins-bad
-gstreamer-plugins-bad-free
-gstreamer-plugins-bad-free-extras
-gstreamer-plugins-bad-nonfree
+gstreamer-ffmpeg
+gstreamer*-libav
 faad2
 vlc
 vlc-extras
@@ -192,24 +196,38 @@ ANSI_COLOR="0;34"
 CPE_NAME="cpe:/o:snowcorp:snowbird:19"
 FOE
 
-# Set remix logo as default
+# Set remix logo as default (Amit Caleechurn)
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/system-logo-white.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/fedora-gdm-logo.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/fedora-logo.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/fedora-logo-small.png 
 cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png /usr/share/pixmaps/poweredby.png
 
-# Rebuild initrd for the boot screen (Doesn't seem to work on boot)
-KERNEL_VERSION=$(rpm -q kernel --qf '%{version}-%{release}.%{arch}\n')
-/usr/sbin/plymouth-set-default-theme solar --rebuild-initrd
-/sbin/dracut -f /boot/initramfs-$KERNEL_VERSION.img $KERNEL_VERSION
-#cat >> /etc/default/grub << FOE
-#GRUB_GFXMODE="1024x768"
-#FOE
-#/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
-
 # Make libreoffice pretty with faenza icons (Amit Caleechurn)
 cp  /opt/patch/images_crystal.zip /usr/lib64/libreoffice/share/config/images_tango.zip
+/sbin/restorecon /usr/lib64/libreoffice/share/config/images_tango.zip
+
+# Change nobody to somebody (Amit Caleechurn)
+mkdir -p /var/lib/AccountsService/icons
+cp /usr/share/pixmaps/faces/lightning.jpg /var/lib/AccountsService/icons/liveuser
+
+mkdir -p /var/lib/AccountsService/users
+cat >> /var/lib/AccountsService/users/liveuser << FOE
+[User]
+Language=en_US.utf8
+XSession=
+Icon=/var/lib/AccountsService/icons/liveuser
+SystemAccount=false
+FOE
+
+# Set up auto-login
+cat > /etc/gdm/custom.conf << FOE
+[daemon]
+AutomaticLoginEnable=True
+AutomaticLogin=liveuser
+FOE
+
+/sbin/restorecon -R /var/lib/AccountsService
 
 # Add link to the Inkscape course (Amit Caleechurn)
 cat >> /usr/share/applications/inkscape-course.desktop << FOE
@@ -284,6 +302,12 @@ FOE
 cat >> /usr/share/glib-2.0/schemas/org.gnome.desktop.screensaver.gschema.override << FOE
 [org.gnome.desktop.screensaver]
 lock-enabled=false
+FOE
+
+# and hide the lock screen option
+cat >> /usr/share/glib-2.0/schemas/org.gnome.desktop.lockdown.gschema.override << FOE
+[org.gnome.desktop.lockdown]
+disable-lock-screen=true
 FOE
 
 # Show week date (Amit Caleechurn)
@@ -373,13 +397,6 @@ if [ -f /usr/share/applications/liveinst.desktop ]; then
   # need to move it to anaconda.desktop to make shell happy
   mv /usr/share/applications/liveinst.desktop /usr/share/applications/anaconda.desktop
 
-# Set up auto-login
-cat > /etc/gdm/custom.conf << FOE
-[daemon]
-AutomaticLoginEnable=True
-AutomaticLogin=liveuser
-FOE
-
 # Turn off PackageKit-command-not-found while uninstalled
 if [ -f /etc/PackageKit/CommandNotFound.conf ]; then
   sed -i -e 's/^SoftwareSourceSearch=true/SoftwareSourceSearch=false/' /etc/PackageKit/CommandNotFound.conf
@@ -387,6 +404,7 @@ fi
 
 EOF
 
+# SnowBird Linux Patch (Amit Caleechurn)
 cat > /etc/rc.d/init.d/patchsb << EOF
 #!/bin/bash
 #
@@ -416,5 +434,45 @@ EOF
 chmod 755 /etc/rc.d/init.d/patchsb
 /sbin/restorecon /etc/rc.d/init.d/patchsb
 /sbin/chkconfig --add patchsb
+
+# Setup additional repositories (Experimental - Amit Caleechurn)
+
+# Import RPM-GPG keys
+for key in $(ls /etc/pki/rpm-gpg/RPM-GPG-KEY-*) ; do
+   rpmkeys --import $key
+done
+
+# OpenPrinting/Database/DriverPackages based on the LSB 3.2
+cat > /etc/yum.repos.d/openprinting-drivers.repo << OPENPRINTING_REPO_EOF
+[openprinting-drivers-main]
+name=OpenPrinting LSB-based driver packages
+baseurl=http://www.openprinting.org/download/printdriver/components/lsb3.2/main/RPMS
+enabled=1
+gpgcheck=0
+
+[openprinting-drivers-contrib]
+name=OpenPrinting LSB-based driver packages
+baseurl=http://www.openprinting.org/download/printdriver/components/lsb3.2/contrib/RPMS
+enabled=1
+gpgcheck=0
+
+[openprinting-drivers-main-nonfree]
+name=OpenPrinting LSB-based driver packages
+baseurl=http://www.openprinting.org/download/printdriver/components/lsb3.2/main-nonfree/RPMS
+enabled=1
+gpgcheck=0
+OPENPRINTING_REPO_EOF
+
+# A reduced version of Remi repository
+cat > /etc/yum.repos.d/remix.repo << REMI_REPO_EOF
+[remix-remi]
+name=Remix Remi - Fedora \$releasever - \$basearch
+mirrorlist=http://rpms.famillecollet.com/fedora/\$releasever/remi/mirror
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+failovermethod=priority
+includepkgs=libdvd*,remi-release*
+REMI_REPO_EOF
 
 %end

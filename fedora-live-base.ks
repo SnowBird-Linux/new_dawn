@@ -55,9 +55,6 @@ qemu-guest-agent
 
 %post
 
-#Set the plymouth theme (Experimental - Amit Caleechurn)
-sed -i s/^Theme=.*/Theme=solar/ /etc/plymouth/plymouthd.conf
-
 # FIXME: it'd be better to get this installed from a package
 cat > /etc/rc.d/init.d/livesys << EOF
 #!/bin/bash
@@ -220,6 +217,16 @@ systemctl --no-reload disable crond.service 2> /dev/null || :
 systemctl --no-reload disable atd.service 2> /dev/null || :
 systemctl stop crond.service 2> /dev/null || :
 systemctl stop atd.service 2> /dev/null || :
+
+# Disable a few more services for livecd boots
+systemctl --no-reload disable iscsi.service 2> /dev/null || :
+systemctl --no-reload disable iscsid.service 2> /dev/null || :
+systemctl stop iscsi.service 2> /dev/null || :
+systemctl stop iscsid.service 2> /dev/null || :
+systemctl --no-reload disable smartd.service 2> /dev/null || :
+systemctl stop smartd.service 2> /dev/null || :
+systemctl --no-reload disable libvirtd.service 2> /dev/null || :
+systemctl stop libvirtd.service 2> /dev/null || :
 
 EOF
 

@@ -24,3 +24,4 @@ repo --name=google-chrome --baseurl=http://dl.google.com/linux/chrome/rpm/stable
 repo --name=google-talkplugin --baseurl=http://dl.google.com/linux/talkplugin/rpm/stable/$basearch
 repo --name=remi --includepkgs=libdvd*,remi-release* --baseurl=http://rpms.famillecollet.com/fedora/$releasever/remi/$basearch/
 repo --name="Additional Software"  --baseurl=file:///build/downloads/
+

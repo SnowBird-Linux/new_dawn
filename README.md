@@ -38,11 +38,9 @@ SB19 is based on Gnome3 so most %post options are related to the configuration o
 
 ## Known Bugs ##
 
-1) During the build process ppp is not installed for a weird reason (suspect missing -p option in mkdir). Yum install ppp once you boot off the media or install the image fixes the issue.
+1) The Anaconda icon (live install) seems to be missing from the gnome icon set or it may be located somewhere else now? Investigation required. No side effects, just ugly when looking at the window lists.
 
-2) The Anaconda icon (live install) seems to be missing from the gnome icon set or it may be located somewhere else now? Investigation required. No side effects, just ugly when looking at the window lists.
-
-3) Anaconda (live install) displays the version number twice "SnowBird Linux 19 (New Dawn) 19. Investigation required. No side effects, just annoying.
+2) Anaconda (live install) displays the version number twice "SnowBird Linux 19 (New Dawn) 19. Investigation required. No side effects, just annoying.
 
 
 ## To do list ##

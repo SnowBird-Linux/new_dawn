@@ -13,7 +13,9 @@ part / --size 6990 --fstype=ext4
 
 %packages
 
-# Desktop
+### Free World ###
+
+# Desktop (Amit Caleechurn)
 @gnome-desktop
 gnome-shell-extension-places-menu
 gnome-shell-extension-weather
@@ -22,7 +24,7 @@ gnome-shell-extension-alternate-tab
 gnome-shell-extension-drive-menu
 gnome-tweak-tool
 
-# Office
+# Office (Amit Caleechurn)
 @libreoffice
 libreoffice-presentation-minimizer
 libreoffice-wiki-publisher
@@ -31,8 +33,8 @@ vym
 cherrytree
 
 # Implicitly include the fonts we want (Amit Caleechurn)
-@fonts
-# The fonts group is included as a dirty fix for Anaconda
+# The fonts group is included as a dirty fix for Anaconda!
+@fonts	
 liberation-mono-fonts
 liberation-sans-fonts
 liberation-serif-fonts
@@ -47,9 +49,14 @@ adobe-source-sans-pro-fonts
 lato-fonts
 overpass-fonts
 
-# Internet
+# Internet (Amit Caleechurn)
 @firefox
 mozilla-adblockplus
+evolution-mapi
+evolution-pst
+evolution-rspam
+evolution-rss
+evolution-spamassassin
 gftp
 gwibber
 ekiga
@@ -118,9 +125,15 @@ dia-gnomeDIAicons
 @multimedia
 banshee
 
-### Non Free (Amit Caleechurn)###
+# Rebranding to SnowBird Linux (Amit Caleechurn)
+generic-release
+generic-logos
+generic-release-notes
+fedora-remix-logos
 
-# Audio & Video
+### Non Free ###
+
+# Audio & Video (Amit Caleechurn)
 flash-plugin
 gstreamer*-plugins-bad
 gstreamer*-plugins-bad-*free
@@ -163,17 +176,13 @@ google-chrome-stable
 opera
 HandBrake-gui
 hamster-time-tracker
-
-# Rebranding to SnowBird Linux (Amit Caleechurn)
-generic-release
-generic-logos
-generic-release-notes
-fedora-remix-logos
+rosa-media-player
 
 %end
 
 %post --nochroot
 
+# Stage patch (Amit Caleechurn)
 mkdir $INSTALL_ROOT/opt/patch
 cp -r /build/patch/* $INSTALL_ROOT/opt/patch
 
@@ -207,28 +216,6 @@ cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png
 cp  /opt/patch/images_crystal.zip /usr/lib64/libreoffice/share/config/images_tango.zip
 /sbin/restorecon /usr/lib64/libreoffice/share/config/images_tango.zip
 
-# Change nobody to somebody (Amit Caleechurn)
-mkdir -p /var/lib/AccountsService/icons
-cp /usr/share/pixmaps/faces/lightning.jpg /var/lib/AccountsService/icons/liveuser
-
-mkdir -p /var/lib/AccountsService/users
-cat >> /var/lib/AccountsService/users/liveuser << FOE
-[User]
-Language=en_US.utf8
-XSession=
-Icon=/var/lib/AccountsService/icons/liveuser
-SystemAccount=false
-FOE
-
-# Set up auto-login
-cat > /etc/gdm/custom.conf << FOE
-[daemon]
-AutomaticLoginEnable=True
-AutomaticLogin=liveuser
-FOE
-
-/sbin/restorecon -R /var/lib/AccountsService
-
 # Add link to the Inkscape course (Amit Caleechurn)
 cat >> /usr/share/applications/inkscape-course.desktop << FOE
 [Desktop Entry]
@@ -244,15 +231,13 @@ chmod a+x /usr/share/applications/inkscape-course.desktop
 
 # Add colours to terminal (Amit Caleechurn)
 cat <<EOF | tee -a /etc/bashrc > /dev/null 2>&1
-# Colors in Terminal
+# Colours in Terminal
 if [ \$USER = root ]; then
 PS1='\[\033[1;31m\][\u@\h \W]\\$\[\033[0m\] '
 else
 PS1='\[\033[01;32m\]\u@\h\[\033[00m\] \[\033[01;34m\]\W\[\033[00m\]\[\033[1;32m\]\\$\[\033[m\] '
 fi
 EOF
-
-cat >> /etc/rc.d/init.d/livesys << EOF
 
 # Disable auto-download-updates (Amit Caleechurn)
 cat >> /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.updates.gschema.override << FOE
@@ -390,6 +375,30 @@ FOE
 # Rebuild schema cache with any overrides we installed
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
+cat >> /etc/rc.d/init.d/livesys << EOF
+
+# Change nobody to somebody (Amit Caleechurn)
+mkdir -p /var/lib/AccountsService/icons
+cp /usr/share/pixmaps/faces/lightning.jpg /var/lib/AccountsService/icons/liveuser
+
+mkdir -p /var/lib/AccountsService/users
+cat >> /var/lib/AccountsService/users/liveuser << FOE
+[User]
+Language=en_US.utf8
+XSession=
+Icon=/var/lib/AccountsService/icons/liveuser
+SystemAccount=false
+FOE
+
+# Set up auto-login
+cat > /etc/gdm/custom.conf << FOE
+[daemon]
+AutomaticLoginEnable=True
+AutomaticLogin=liveuser
+FOE
+
+/sbin/restorecon -R /var/lib/AccountsService
+
 # Make the installer show up
 if [ -f /usr/share/applications/liveinst.desktop ]; then
   # Show harddisk install in shell dash
@@ -435,14 +444,14 @@ chmod 755 /etc/rc.d/init.d/patchsb
 /sbin/restorecon /etc/rc.d/init.d/patchsb
 /sbin/chkconfig --add patchsb
 
-# Setup additional repositories (Experimental - Amit Caleechurn)
+### Setup additional repositories ###
 
-# Import RPM-GPG keys
+# Import RPM-GPG keys (Amit Caleechurn)
 for key in $(ls /etc/pki/rpm-gpg/RPM-GPG-KEY-*) ; do
    rpmkeys --import $key
 done
 
-# OpenPrinting/Database/DriverPackages based on the LSB 3.2
+# OpenPrinting/Database/DriverPackages based on the LSB 3.2 (Amit Caleechurn)
 cat > /etc/yum.repos.d/openprinting-drivers.repo << OPENPRINTING_REPO_EOF
 [openprinting-drivers-main]
 name=OpenPrinting LSB-based driver packages
@@ -463,7 +472,7 @@ enabled=1
 gpgcheck=0
 OPENPRINTING_REPO_EOF
 
-# A reduced version of Remi repository
+# A reduced version of Remi repository (Amit Caleechurn)
 cat > /etc/yum.repos.d/remix.repo << REMI_REPO_EOF
 [remix-remi]
 name=Remix Remi - Fedora \$releasever - \$basearch
@@ -474,5 +483,64 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
 failovermethod=priority
 includepkgs=libdvd*,remi-release*
 REMI_REPO_EOF
+
+# Russian Fedora repositories (Amit Caleechurn)
+
+cat > /etc/yum.repos.d/russian-fedora.repo << RUSSIAN_FEDORA_REPO_EOF
+
+[russianfedora-free]
+name=Russian Fedora for Fedora $releasever - Free
+#baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$releasever/Everything/$basearch/os
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-$releasever&arch=$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-free-fedora
+includepkgs=basketpwd,rosa-media-player,chromedriver,chromium,grub-customizer
+
+[russianfedora-free-updates]
+name=Russian Fedora for Fedora $releasever - Free - Updates
+#baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/updates/$releasever/$basearch
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-free-fedora
+includepkgs=basketpwd,rosa-media-player,chromedriver,chromium,grub-customizer
+
+[russianfedora-nonfree]
+name=Russian Fedora for Fedora $releasever - Nonfree
+#baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$releasever/Everything/$basearch/os
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
+includepkgs=opera,opera-next,opera-*
+
+[russianfedora-nonfree-updates]
+name=Russian Fedora for Fedora $releasever - Nonfree - Updates
+#baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/updates/$releasever/$basearch
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
+includepkgs=opera,opera-next,opera-*
+
+RUSSIAN_FEDORA_REPO_EOF
+
+### Clean-up and Optimization process ### (Amit Caleechurn)
+
+# Enable name resolution
+set -o verbose
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+# Install skipped package
+yum install ppp -y
+# Update the packages if required 
+yum update -y
+# Clean-up
+rm -f /var/log/yum.log
+yum clean all
+# Prepare package metadata
+yum check-update
+# Clean up resolv.conf
+echo "" > /etc/resolv.conf
 
 %end

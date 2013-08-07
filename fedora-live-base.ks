@@ -346,4 +346,3 @@ if [ "$(uname -i)" = "i386" -o "$(uname -i)" = "x86_64" ]; then
 fi
 
 %end
-

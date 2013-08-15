@@ -31,6 +31,7 @@ libreoffice-wiki-publisher
 openclipart
 vym
 cherrytree
+calibre
 
 # Implicitly include the fonts we want (Amit Caleechurn)
 # The fonts group is included as a dirty fix for Anaconda!
@@ -123,7 +124,8 @@ dia-gnomeDIAicons
 
 # Audio & Video (Amit Caleechurn)
 @multimedia
-banshee
+clementine
+gtk-recordmydesktop
 
 # Rebranding to SnowBird Linux (Amit Caleechurn)
 generic-release
@@ -177,6 +179,9 @@ opera
 HandBrake-gui
 hamster-time-tracker
 rosa-media-player
+bleachbit
+flareget
+flaremonitor
 
 %end
 
@@ -491,7 +496,7 @@ cat > /etc/yum.repos.d/russian-fedora.repo << RUSSIAN_FEDORA_REPO_EOF
 [russianfedora-free]
 name=Russian Fedora for Fedora $releasever - Free
 #baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$releasever/Everything/$basearch/os
-mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-$releasever&arch=$basearch
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-19&arch=x86_64
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-free-fedora
@@ -500,7 +505,7 @@ includepkgs=basketpwd,rosa-media-player,chromedriver,chromium,grub-customizer
 [russianfedora-free-updates]
 name=Russian Fedora for Fedora $releasever - Free - Updates
 #baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/updates/$releasever/$basearch
-mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-updates-released-19&arch=x86_64
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-free-fedora
@@ -509,7 +514,7 @@ includepkgs=basketpwd,rosa-media-player,chromedriver,chromium,grub-customizer
 [russianfedora-nonfree]
 name=Russian Fedora for Fedora $releasever - Nonfree
 #baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$releasever/Everything/$basearch/os
-mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-19&arch=x86_64
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
@@ -518,7 +523,7 @@ includepkgs=opera,opera-next,opera-*
 [russianfedora-nonfree-updates]
 name=Russian Fedora for Fedora $releasever - Nonfree - Updates
 #baseurl=http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/updates/$releasever/$basearch
-mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-updates-released-19&arch=x86_64
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
@@ -534,7 +539,7 @@ echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 # Install skipped package
 yum install ppp -y
 # Update the packages if required 
-yum update -y
+yum --nogpgcheck update -y
 # Clean-up
 rm -f /var/log/yum.log
 yum clean all

@@ -177,7 +177,7 @@ if [ -n "\$configdone" ]; then
 fi
 
 # add a SnowBird user with no passwd (Amit Caleechurn)
-action "Adding live user" useradd \$USERADDARGS -c "SnowBird R&D" liveuser
+action "Adding live user" useradd \$USERADDARGS -c "SnowBird Labs" liveuser
 passwd -d liveuser > /dev/null
 usermod -aG wheel liveuser > /dev/null
 
@@ -324,15 +324,15 @@ cp $INSTALL_ROOT/usr/share/doc/*-release-*/GPL $LIVE_ROOT/GPL
 
 # add a README (Amit Caleechurn)
 cat > $LIVE_ROOT/README.txt << EOF
-SnowBird Linux is brought to you by Amit Caleechurn (acaleechurn@fedoraproject.org).
+SnowBird Linux is brought to you by Amit Caleechurn (amit.caleechurn@sblabs.org).
 
-This is a Live DVD, simply reboot your computer to run from this DVD.
+This is a Live disc, simply reboot your computer to run SnowBird Linux.
 
-To install SnowBird Linux, simply run the installer on the desktop or in the left menu (under GNOME 3).
+To install SnowBird Linux onto your hard drive,run the installer from the desktop once the system has booted.
 
-SnowBird Linux has been developed (remixed) for SnowBird R&D a subsidiary of SnowBird Corporation.
+SnowBird Linux has been developed (remixed) by SnowBird Labs.
 
-More info about SnowBird Linux can be found @ http://linuxmauritius.wordpress.com/snowbird-linux/
+More info about SnowBird Linux can be found @ http://www.sblabs.org
 
 Enjoy!
 

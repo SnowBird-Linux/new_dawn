@@ -56,7 +56,7 @@ mozilla-adblockplus
 evolution-mapi
 evolution-pst
 evolution-rspam
-evolution-rss
+#evolution-rss
 evolution-spamassassin
 gftp
 gwibber
@@ -207,7 +207,7 @@ ID=snowbird
 VERSION_ID=19
 PRETTY_NAME="SnowBird Linux 19 (New Dawn)"
 ANSI_COLOR="0;34"
-CPE_NAME="cpe:/o:snowcorp:snowbird:19"
+CPE_NAME="cpe:/o:sblabs:snowbird:19"
 FOE
 
 # Set remix logo as default (Amit Caleechurn)

@@ -56,7 +56,7 @@ mozilla-adblockplus
 evolution-mapi
 evolution-pst
 evolution-rspam
-#evolution-rss
+evolution-rss
 evolution-spamassassin
 gftp
 gwibber
@@ -220,6 +220,9 @@ cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png
 # Make libreoffice pretty with faenza icons (Amit Caleechurn)
 cp  /opt/patch/images_crystal.zip /usr/lib64/libreoffice/share/config/images_tango.zip
 /sbin/restorecon /usr/lib64/libreoffice/share/config/images_tango.zip
+
+#Fix Calibre menu entry
+sed -i 's/calibre %F/Calibre/g' /usr/share/applications/calibre-gui.desktop
 
 # Add link to the Inkscape course (Amit Caleechurn)
 cat >> /usr/share/applications/inkscape-course.desktop << FOE
@@ -547,5 +550,13 @@ yum clean all
 yum check-update
 # Clean up resolv.conf
 echo "" > /etc/resolv.conf
+
+# Remove unwanted menu entries
+mkdir -p /opt/backups
+mv /usr/share/applications/bleachbit-root.desktop /opt/backups
+mv /usr/share/applications/calibre-ebook-viewer.desktop /opt/backups
+mv /usr/share/applications/calibre-lrfviewer.desktop /opt/backups
+mv /usr/share/applications/mailnag_config.desktop /opt/backups
+mv /usr/share/applications/evolution-rss.desktop /opt/backups
 
 %end

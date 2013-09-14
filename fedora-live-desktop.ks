@@ -165,6 +165,8 @@ cabextract
 xz-lzma-compat
 freetype-freeworld
 ike
+exfat-utils
+fuse-exfat
 
 # Local Packages (Amit Caleechurn)
 libdvdcss

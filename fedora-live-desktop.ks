@@ -23,6 +23,7 @@ gnome-shell-extension-window-list
 gnome-shell-extension-alternate-tab
 gnome-shell-extension-drive-menu
 gnome-tweak-tool
+alacarte
 
 # Office (Amit Caleechurn)
 @libreoffice
@@ -177,6 +178,7 @@ google-talkplugin
 webcore-fonts
 grub-customizer
 google-chrome-stable
+google-earth-stable
 opera
 HandBrake-gui
 hamster-time-tracker
@@ -523,7 +525,7 @@ mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-19&arch=x86_
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
-includepkgs=opera,opera-next,opera-*
+includepkgs=opera-*
 
 [russianfedora-nonfree-updates]
 name=Russian Fedora for Fedora $releasever - Nonfree - Updates
@@ -532,7 +534,7 @@ mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-updates-rele
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
-includepkgs=opera,opera-next,opera-*
+includepkgs=opera-*
 
 RUSSIAN_FEDORA_REPO_EOF
 
@@ -541,8 +543,6 @@ RUSSIAN_FEDORA_REPO_EOF
 # Enable name resolution
 set -o verbose
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
-# Install skipped package
-yum install ppp -y
 # Update the packages if required 
 yum --nogpgcheck update -y
 # Clean-up

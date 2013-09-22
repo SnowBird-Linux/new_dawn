@@ -23,6 +23,10 @@ gnome-shell-extension-window-list
 gnome-shell-extension-alternate-tab
 gnome-shell-extension-drive-menu
 gnome-tweak-tool
+gnome-activity-journal
+gnome-phone-manager
+gnome-schedule
+
 alacarte
 
 # Office (Amit Caleechurn)

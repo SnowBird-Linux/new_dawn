@@ -406,14 +406,14 @@ Icon=/var/lib/AccountsService/icons/liveuser
 SystemAccount=false
 FOE
 
+/sbin/restorecon -R /var/lib/AccountsService
+
 # Set up auto-login
 cat > /etc/gdm/custom.conf << FOE
 [daemon]
 AutomaticLoginEnable=True
 AutomaticLogin=liveuser
 FOE
-
-/sbin/restorecon -R /var/lib/AccountsService
 
 # Make the installer show up
 if [ -f /usr/share/applications/liveinst.desktop ]; then

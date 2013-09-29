@@ -334,7 +334,7 @@ FOE
 # Window list extension (Amit Caleechurn)
 cat >> /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.window-list.gschema.override << FOE
 [org.gnome.shell.extensions.window-list]
-grouping-mode=always
+grouping-mode='always'
 FOE
 
 # Configure weather (Amit Caleechurn)
@@ -421,6 +421,7 @@ if [ -f /usr/share/applications/liveinst.desktop ]; then
   sed -i -e 's/NoDisplay=true/NoDisplay=false/' /usr/share/applications/liveinst.desktop ""
   # need to move it to anaconda.desktop to make shell happy
   mv /usr/share/applications/liveinst.desktop /usr/share/applications/anaconda.desktop
+fi
 
 # Turn off PackageKit-command-not-found while uninstalled
 if [ -f /etc/PackageKit/CommandNotFound.conf ]; then
@@ -474,18 +475,21 @@ name=OpenPrinting LSB-based driver packages
 baseurl=http://www.openprinting.org/download/printdriver/components/lsb3.2/main/RPMS
 enabled=1
 gpgcheck=0
+skip_if_unavailable=1
 
 [openprinting-drivers-contrib]
 name=OpenPrinting LSB-based driver packages
 baseurl=http://www.openprinting.org/download/printdriver/components/lsb3.2/contrib/RPMS
 enabled=1
 gpgcheck=0
+skip_if_unavailable=1
 
 [openprinting-drivers-main-nonfree]
 name=OpenPrinting LSB-based driver packages
 baseurl=http://www.openprinting.org/download/printdriver/components/lsb3.2/main-nonfree/RPMS
 enabled=1
 gpgcheck=0
+skip_if_unavailable=1
 OPENPRINTING_REPO_EOF
 
 # A reduced version of Remi repository (Amit Caleechurn)
@@ -497,6 +501,7 @@ enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
 failovermethod=priority
+skip_if_unavailable=1
 includepkgs=libdvd*,remi-release*
 REMI_REPO_EOF
 
@@ -511,6 +516,7 @@ mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-19&arch=x86_64
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-free-fedora
+skip_if_unavailable=1
 includepkgs=basketpwd,rosa-media-player,chromedriver,chromium,grub-customizer
 
 [russianfedora-free-updates]
@@ -520,6 +526,7 @@ mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=free-fedora-updates-release
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-free-fedora
+skip_if_unavailable=1
 includepkgs=basketpwd,rosa-media-player,chromedriver,chromium,grub-customizer
 
 [russianfedora-nonfree]
@@ -529,6 +536,7 @@ mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-19&arch=x86_
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
+skip_if_unavailable=1
 includepkgs=opera-*
 
 [russianfedora-nonfree-updates]
@@ -538,6 +546,7 @@ mirrorlist=http://mirrors.rfremix.ru/mirrorlist?repo=nonfree-fedora-updates-rele
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
+skip_if_unavailable=1
 includepkgs=opera-*
 
 RUSSIAN_FEDORA_REPO_EOF

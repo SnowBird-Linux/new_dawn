@@ -190,6 +190,7 @@ rosa-media-player
 bleachbit
 flareget
 flaremonitor
+AdobeReader_enu
 
 %end
 

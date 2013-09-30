@@ -186,7 +186,7 @@ mkdir -p /home/liveuser/.config
 cat >> /home/liveuser/.config/gnome-initial-setup-done << FOE
 yes
 FOE
-# Change the permissions and context to ensure that the user user can login (Amit Caleechurn)
+# and change the permissions and context to ensure that the user user can login (Amit Caleechurn)
 /bin/chown -R liveuser:liveuser /home/liveuser/.config
 /sbin/restorecon -R /home/liveuser/.config
 

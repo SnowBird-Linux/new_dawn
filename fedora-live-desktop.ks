@@ -230,9 +230,6 @@ cp /usr/share/pixmaps/fedora-remix-logos/Fedora-Remix-Transparent-Strawberry.png
 cp  /opt/patch/images_crystal.zip /usr/lib64/libreoffice/share/config/images_tango.zip
 /sbin/restorecon /usr/lib64/libreoffice/share/config/images_tango.zip
 
-#Fix Calibre menu entry
-sed -i 's/calibre %F/Calibre/g' /usr/share/applications/calibre-gui.desktop
-
 # Add link to the Inkscape course (Amit Caleechurn)
 cat >> /usr/share/applications/inkscape-course.desktop << FOE
 [Desktop Entry]
@@ -574,5 +571,8 @@ mv /usr/share/applications/calibre-ebook-viewer.desktop /opt/backups
 mv /usr/share/applications/calibre-lrfviewer.desktop /opt/backups
 mv /usr/share/applications/mailnag_config.desktop /opt/backups
 mv /usr/share/applications/evolution-rss.desktop /opt/backups
+
+#Fix Calibre menu entry
+sed -i 's/calibre %F/Calibre/g' /usr/share/applications/calibre-gui.desktop
 
 %end

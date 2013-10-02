@@ -341,9 +341,9 @@ cat >> /usr/share/glib-2.0/schemas/org.gnome.Weather.Application.gschema.overrid
 locations=[<(uint32 1, <('Port Louis', 'FIMP', true, @m(dd) (-0.35662893800641049, 1.0064732078011609), @m(dd) (-0.35189230640271557, 1.0035449292887497))>)>]
 FOE
 
-# Configure Gweather (Amit Caleechurn)
-cat >> /usr/share/glib-2.0/schemas/org.gnome.Gweather.gschema.override << FOE
-[org.gnome.Gweather]
+# Configure GWeather (Amit Caleechurn)
+cat >> /usr/share/glib-2.0/schemas/org.gnome.GWeather.gschema.override << FOE
+[org.gnome.GWeather]
 distance-unit='km'
 pressure-unit='hpa'
 speed-unit='kph'

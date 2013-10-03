@@ -552,7 +552,6 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-russianfedora-nonfree-fedora
 skip_if_unavailable=1
 includepkgs=opera-*
-
 RUSSIAN_FEDORA_REPO_EOF
 
 # SnowBird Linux 19 repository 
@@ -567,7 +566,6 @@ baseurl=http://sourceforge.net/projects/snowbird/files/yum/sb19/
 enabled=1
 metadata_expire=7d
 gpgcheck=0
-
 sbl-19_EOF
 
 ### Clean-up and Optimization process ### (Amit Caleechurn)

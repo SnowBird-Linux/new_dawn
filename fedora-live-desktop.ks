@@ -192,6 +192,12 @@ flareget
 flaremonitor
 AdobeReader_enu
 
+# Harwdare Support
+splix
+hplip
+epson-inkjet-printer-escpr
+iscan-firmware
+
 %end
 
 %post --nochroot
@@ -496,7 +502,7 @@ cat > /etc/yum.repos.d/remix.repo << REMI_REPO_EOF
 name=Remix Remi - Fedora \$releasever - \$basearch
 mirrorlist=http://rpms.famillecollet.com/fedora/\$releasever/remi/mirror
 enabled=1
-gpgcheck=1
+gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
 failovermethod=priority
 skip_if_unavailable=1
@@ -548,6 +554,21 @@ skip_if_unavailable=1
 includepkgs=opera-*
 
 RUSSIAN_FEDORA_REPO_EOF
+
+# SnowBird Linux 19 repository 
+
+cat > /etc/yum.repos.d/sbl-19.repo << sbl-19_EOF
+
+[sbl-19-repo]
+name= SnowBird Linux (sf.net) 19 - x86_64
+failovermethod=priority
+skip_if_unavailable=1
+baseurl=http://sourceforge.net/projects/snowbird/files/yum/sb19/
+enabled=1
+metadata_expire=7d
+gpgcheck=0
+
+sbl-19_EOF
 
 ### Clean-up and Optimization process ### (Amit Caleechurn)
 
